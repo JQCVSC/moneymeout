@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Money Me Out - Direct-to-Bank Monetization for YouTube Creators</title>
+    <meta name="description" content="Money Me Out is the direct-to-bank monetization platform for YouTube Creators. Keep 95% of fan donations with instant Stripe Connect payouts, verified channel ownership, and zero payout thresholds." />
+    <meta name="keywords" content="Money Me Out, YouTube creator monetization, YouTube Super Chat alternative, instant creator payouts, Stripe Connect for creators, direct fan donations, lower YouTube fees" />
+    <meta name="author" content="Money Me Out" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.moneymeout.com" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.moneymeout.com" />
+    <meta property="og:title" content="Money Me Out - The 30% Tax Killer for YouTube Creators" />
+    <meta property="og:description" content="Direct-to-bank monetization for YouTube Creators. 5% platform fee, instant payouts via Stripe Connect, and YouTube API verified channel identity." />
+    <meta property="og:image" content="https://i.imgur.com/OTiADfM.jpeg" />
+    <meta property="og:site_name" content="Money Me Out" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://www.moneymeout.com" />
+    <meta name="twitter:title" content="Money Me Out - The 30% Tax Killer for YouTube Creators" />
+    <meta name="twitter:description" content="Direct-to-bank monetization for YouTube Creators. Instant payouts with Stripe Connect and verified channel ownership." />
+    <meta name="twitter:image" content="https://i.imgur.com/OTiADfM.jpeg" />
+
+    <!-- JSON-LD Structured Data for Search & Answer Engines (AEO) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://www.moneymeout.com/#webapp",
+          "name": "Money Me Out",
+          "url": "https://www.moneymeout.com",
+          "applicationCategory": "FinanceApplication",
+          "operatingSystem": "All",
+          "description": "Money Me Out is a direct-to-bank monetization platform for YouTube Creators featuring instant Stripe payouts, channel verification via YouTube Data API, and a 5% flat fee.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://www.moneymeout.com/#organization",
+          "name": "Money Me Out",
+          "url": "https://www.moneymeout.com",
+          "logo": "https://i.imgur.com/OTiADfM.jpeg",
+          "sameAs": [
+            "https://www.youtube.com"
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://www.moneymeout.com/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is Money Me Out?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Money Me Out is a direct-to-bank monetization platform for YouTube creators that allows fans to support creators directly. It verifies creator identity via the official YouTube Data API and processes instant payouts through Stripe Connect with a 5% platform fee."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does Money Me Out compare to YouTube Super Chat?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Legacy platforms like YouTube Super Chat take a 30% cut of creator earnings and hold funds until a $100 payout threshold is met. Money Me Out charges only a 5% platform fee, has no payout thresholds, and enables instant payouts directly to bank accounts."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How do creator payouts work on Money Me Out?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Creators connect their bank account via Stripe Connect Express. When fans contribute, payments clear securely and creators can cash out funds instantly to their bank account."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does Money Me Out verify YouTube creators?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Money Me Out authenticates creators through Google OAuth and the official YouTube Data API to confirm channel ownership before enabling monetization, preventing identity fraud."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <link rel="icon" type="image/jpeg" href="https://i.imgur.com/iImqzDI.jpeg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Calistoga&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://js.stripe.com/v3/"></script>
+    <link rel="stylesheet" href="/index.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

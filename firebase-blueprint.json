@@ -1,0 +1,111 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account information and claimed creator link",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "name": { "type": "string", "description": "Display name" },
+        "email": { "type": "string", "format": "email" },
+        "claimedCreator": { "$ref": "#/entities/CreatorProfile" }
+      },
+      "required": ["uid", "name", "email"]
+    },
+    "CreatorProfile": {
+      "title": "Creator Profile Link",
+      "description": "Identifier for the claimed YouTube channel",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Target creator ID" },
+        "name": { "type": "string" },
+        "handle": { "type": "string" },
+        "avatarUrl": { "type": "string" },
+        "bannerUrl": { "type": "string" }
+      },
+      "required": ["id", "name", "handle"]
+    },
+    "Creator": {
+      "title": "Creator Detailed Data",
+      "description": "Public and private data for a creator including balance",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "handle": { "type": "string" },
+        "description": { "type": "string" },
+        "avatarUrl": { "type": "string" },
+        "bannerUrl": { "type": "string" },
+        "balance": { "type": "number" },
+        "totalEarnings": { "type": "number" },
+        "stripeConnectAccountId": { "type": "string" },
+        "stripeOnboardingComplete": { "type": "boolean" },
+        "lastUpdated": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Donation": {
+      "title": "Donation",
+      "description": "A payment from a fan to a creator",
+      "type": "object",
+      "properties": {
+        "amount": { "type": "number" },
+        "fanName": { "type": "string" },
+        "fanId": { "type": "string" },
+        "message": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "stripePaymentIntentId": { "type": "string" }
+      }
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Alert for the creator",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["donation", "withdrawal"] },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "message": { "type": "string" },
+        "amount": { "type": "number" },
+        "fanName": { "type": "string" },
+        "isRead": { "type": "boolean" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Withdrawal": {
+      "title": "Withdrawal",
+      "description": "Record of a transfer to a creator's bank account",
+      "type": "object",
+      "properties": {
+        "amount": { "type": "number" },
+        "status": { "type": "string" },
+        "stripeTransferId": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User documents mapping to Auth UIDs"
+    },
+    "/users/{userId}/payouts/{payoutId}": {
+      "schema": "Donation",
+      "description": "History of payments sent by the user"
+    },
+    "/creators/{creatorId}": {
+      "schema": "Creator",
+      "description": "Creator profiles and financial data"
+    },
+    "/creators/{creatorId}/donations/{donationId}": {
+      "schema": "Donation",
+      "description": "Donations received by the creator"
+    },
+    "/creators/{creatorId}/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "Creator notifications"
+    },
+    "/creators/{creatorId}/withdrawals/{withdrawalId}": {
+      "schema": "Withdrawal",
+      "description": "Creator withdrawal history"
+    }
+  }
+}

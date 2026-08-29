@@ -1,0 +1,209 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function getUserData() {
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid))
+          ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data
+          : {};
+    }
+
+    function isAdmin() {
+      return isAuthenticated()
+          && (
+              request.auth.token.email in ["jeremycodjoe@gmail.com", "jeremy.codjoe@asu.edu"]
+              || ('role' in getUserData()
+                  && getUserData().role == 'admin')
+          );
+    }
+
+    function isCreatorOwner(creatorId) {
+      return isAuthenticated()
+          && 'claimedCreator'in getUserData()
+          && 'id'in getUserData().claimedCreator
+          && getUserData().claimedCreator.id == creatorId;
+    }
+
+    function isValidEmail(email) {
+      return email is string
+          && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidUrl(url) {
+      return url is string
+          && (url == ""
+              || url.matches("^https://.*")
+              || url.matches("^http://.*"));
+    }
+
+    // ===============================================================
+    // Schema Domain Validators
+    // ===============================================================
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email'])
+          && data.keys().hasOnly(['uid', 'name', 'email', 'claimedCreator', 'role'])
+          && data.uid is string
+          && data.uid.size() > 0
+          && data.uid.size() <= 128
+          && data.email is string
+          && isValidEmail(data.email)
+          && data.email.size() <= 256
+          && (!('name' in data)
+              || (data.name is string
+                  && data.name.size() <= 100))
+          && (!('role' in data)
+              || data.role == 'user'
+              || isAdmin())
+          && (!('claimedCreator' in data)
+              || isValidCreatorProfile(data.claimedCreator));
+    }
+
+    function isValidCreatorProfile(profile) {
+      return profile is map
+          && profile.keys().hasAll(['id', 'name', 'handle'])
+          && profile.keys().hasOnly(['id', 'name', 'handle', 'subscribers', 'description', 'avatarUrl', 'bannerUrl', 'balance'])
+          && profile.id is string
+          && profile.id.size() > 0
+          && profile.id.size() <= 128
+          && profile.name is string
+          && profile.name.size() > 0
+          && profile.name.size() <= 100
+          && profile.handle is string
+          && profile.handle.size() > 0
+          && profile.handle.size() <= 50
+          && (!('subscribers' in profile)
+              || profile.subscribers is number)
+          && (!('description' in profile)
+              || (profile.description is string
+                  && profile.description.size() <= 2000))
+          && (!('avatarUrl' in profile)
+              || isValidUrl(profile.avatarUrl))
+          && (!('bannerUrl' in profile)
+              || isValidUrl(profile.bannerUrl))
+          && (!('balance' in profile)
+              || (profile.balance is number
+                  && profile.balance >= 0));
+    }
+
+    function isValidDonation(data) {
+      return data.keys().hasAll(['amount', 'fanName', 'timestamp'])
+          && data.keys().hasOnly(['amount', 'fanName', 'fanId', 'message', 'timestamp', 'stripePaymentIntentId'])
+          && data.amount is number
+          && data.amount > 0
+          && data.amount <= 10000
+          && data.fanName is string
+          && data.fanName.size() > 0
+          && data.fanName.size() <= 50
+          && data.timestamp is timestamp;
+    }
+
+    function isValidNotification(data) {
+      return data.keys().hasAll(['type', 'title', 'content', 'isRead', 'timestamp'])
+          && data.keys().hasOnly(['type', 'title', 'content', 'message', 'amount', 'fanName', 'isRead', 'timestamp'])
+          && data.type == 'donation'
+          && data.title is string
+          && data.content is string
+          && data.isRead is bool
+          && data.timestamp is timestamp;
+    }
+
+    function isValidPayout(data) {
+      return data.keys().hasAll(['amount', 'creatorName', 'creatorId', 'timestamp'])
+          && data.keys().hasOnly(['amount', 'creatorName', 'creatorId', 'timestamp', 'stripePaymentIntentId', 'stripeSessionId'])
+          && data.amount is number
+          && data.amount > 0
+          && data.amount <= 10000
+          && data.creatorName is string
+          && data.creatorName.size() > 0
+          && data.creatorName.size() <= 100
+          && data.creatorId is string
+          && data.creatorId.size() > 0
+          && data.creatorId.size() <= 128
+          && data.timestamp is timestamp;
+    }
+
+    // ===============================================================
+    // Rules Configuration
+    // ===============================================================
+    // 1. USERS COLLECTION
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+      allow update: if isAuthenticated()
+          && (
+              (isOwner(userId)
+                  && isValidUser(request.resource.data)
+                  && request.resource.data.uid == resource.data.uid
+                  && request.resource.data.email == resource.data.email
+                  && (!('role' in request.resource.data)
+                      || request.resource.data.role == resource.data.role
+                      || isAdmin()))
+              || isAdmin()
+          );
+      allow delete: if isAdmin();
+
+      // PAYOUT RECEIPTS SUBCOLLECTION
+      match /payouts/{payoutId} {
+        allow read: if isAuthenticated() && request.auth.uid == userId;
+        allow create: if isValidPayout(request.resource.data);
+        allow update, delete: if false;
+      }
+    }
+
+    // 2. CREATORS COLLECTION
+    match /creators/{creatorId} {
+      allow read: if true;
+      // Allow creator owner to initialize profile without setting financial/onboarding fields
+      allow create: if isAdmin()
+          || (
+              isCreatorOwner(creatorId)
+              && !request.resource.data.keys().hasAny(['balance', 'totalEarnings', 'stripeConnectAccountId', 'stripeOnboardingComplete'])
+          );
+      // Allow creator owner to edit cosmetic fields or set initial non-financial metadata
+      allow update: if isAdmin()
+          || (
+              isCreatorOwner(creatorId)
+              && (
+                  request.resource.data.diff(resource.data).affectedKeys().hasOnly(['description', 'avatarUrl', 'bannerUrl'])
+                  || (
+                      (!('ownerUid' in resource.data) || resource.data.ownerUid == request.auth.uid)
+                      && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['balance', 'totalEarnings', 'stripeConnectAccountId', 'stripeOnboardingComplete'])
+                  )
+              )
+          );
+      allow delete: if isAdmin();
+
+      // DONATIONS SUBCOLLECTION
+      match /donations/{donationId} {
+        allow read: if isCreatorOwner(creatorId) || isAdmin();
+        allow create: if isAdmin() && isValidDonation(request.resource.data);
+        allow update, delete: if false;
+      }
+
+      // NOTIFICATIONS SUBCOLLECTION
+      match /notifications/{notificationId} {
+        allow read: if isCreatorOwner(creatorId) || isAdmin();
+        allow create: if isAdmin() && isValidNotification(request.resource.data);
+        allow update: if isCreatorOwner(creatorId)
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead'])
+            && request.resource.data.isRead is bool;
+        allow delete: if isAdmin();
+      }
+    }
+
+    // Default deny for all unmapped paths
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}
