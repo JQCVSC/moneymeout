@@ -16,13 +16,9 @@ interface SignUpPageProps {
 
 const SignUpPage: React.FC<SignUpPageProps> = ({ navigateTo }) => {
   const [isCreator, setIsCreator] = useState(true);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const { signup, signInWithGoogle } = useAuth();
+  const { signInWithGoogle } = useAuth();
   
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
@@ -48,25 +44,6 @@ const SignUpPage: React.FC<SignUpPageProps> = ({ navigateTo }) => {
       setSelectedCreator(creator);
       setSearchResults([]);
       setSearchQuery('');
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isCreator && !selectedCreator) {
-        setError('Please find and select your YouTube channel to continue.');
-        return;
-    }
-    setError('');
-    setIsLoading(true);
-
-    const result = await signup(name, email, password, isCreator ? (selectedCreator || undefined) : undefined);
-
-    setIsLoading(false);
-    if (result.success) {
-      navigateTo('dashboard');
-    } else {
-      setError(result.error || 'Could not create account. Please check your details.');
-    }
   };
   
   const handleGoogleSignUp = async () => {
@@ -170,33 +147,11 @@ const SignUpPage: React.FC<SignUpPageProps> = ({ navigateTo }) => {
                   {isCreator ? '2. Create Your Account' : 'Create Your Account'}
                 </legend>
                  <div className="space-y-4">
-                    <Button onClick={handleGoogleSignUp} variant="secondary" className="w-full !py-3" isLoading={isGoogleLoading} disabled={isCreator && !selectedCreator}>
+                    {error && <p className="text-sm text-red-600 text-center">{error}</p>}
+                    <Button onClick={handleGoogleSignUp} variant="secondary" className="w-full !py-3.5 !text-base shadow-sm hover:shadow-md transition-all font-semibold" isLoading={isGoogleLoading} disabled={isCreator && !selectedCreator}>
                         <GoogleIcon className="w-5 h-5 mr-3" />
                         Sign up with Google
                     </Button>
-                    <div className="flex items-center my-2">
-                        <hr className="w-full border-gray-300"/>
-                        <p className="px-2 text-sm text-gray-500 bg-white">OR</p>
-                        <hr className="w-full border-gray-300"/>
-                    </div>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div>
-                            <label className="text-sm font-bold text-gray-600 block mb-2" htmlFor="name">Full Name</label>
-                            <Input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your Name" required className="!rounded-lg !py-3 !px-4" />
-                        </div>
-                        <div>
-                            <label className="text-sm font-bold text-gray-600 block mb-2" htmlFor="email_signup">Email Address</label>
-                            <Input id="email_signup" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required className="!rounded-lg !py-3 !px-4" />
-                        </div>
-                        <div>
-                            <label className="text-sm font-bold text-gray-600 block mb-2" htmlFor="password_signup">Password</label>
-                            <Input id="password_signup" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required className="!rounded-lg !py-3 !px-4" />
-                        </div>
-                         {error && <p className="text-sm text-red-600 text-center">{error}</p>}
-                        <Button type="submit" variant={isCreator ? "success" : "primary"} className="w-full !py-3 !text-lg" isLoading={isLoading} disabled={isCreator && !selectedCreator}>
-                          {isCreator ? 'Create My Page' : 'Sign Up'}
-                        </Button>
-                    </form>
                  </div>
             </fieldset>
 
