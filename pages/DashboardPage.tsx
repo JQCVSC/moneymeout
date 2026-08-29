@@ -28,7 +28,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ navigateTo, onSelectCreat
     onboardStripe,
     withdrawFunds
   } = useCreatorData();
-  const isCreator = !!user.claimedCreator;
+  const isCreator = !!user?.claimedCreator;
   const earningsTabLabel = isCreator ? 'Earnings' : 'Total Payouts to Creators';
   const tabs = isCreator ? ['My Page', 'Browse', earningsTabLabel, 'Notifications', 'Settings'] : ['Browse', 'Total Payouts to Creators', 'Settings'];
 
@@ -43,13 +43,14 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ navigateTo, onSelectCreat
   const queryParams = new URLSearchParams(window.location.search);
   const stripeOnboardingSuccess = queryParams.get('stripe_onboarding') === 'success';
 
+  React.useEffect(() => {
+    if (!user) {
+      navigateTo('search');
+    }
+  }, [user, navigateTo]);
+
   if (!user) {
-    return (
-        <div className="flex flex-col items-center justify-center min-h-screen text-center p-4">
-            <p className="text-xl">You must be logged in to view this page.</p>
-            <Button onClick={() => navigateTo('login')} className="mt-4">Go to Login</Button>
-        </div>
-    )
+    return null;
   }
   
   const handleProfileUpdate = async (e: React.FormEvent) => {

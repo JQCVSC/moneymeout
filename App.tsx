@@ -103,6 +103,9 @@ const App: React.FC = () => {
         setRoute({ page: 'dashboard' });
         window.history.replaceState({ page: 'dashboard' }, '', `${window.location.pathname}?page=dashboard`);
       }
+    } else if (!isAuthLoading && !isAuthenticated && route.page === 'dashboard') {
+      setRoute({ page: 'search' });
+      window.history.replaceState({ page: 'search' }, '', `${window.location.pathname}?page=search`);
     }
   }, [isAuthLoading, isAuthenticated, user, route.page]);
 
@@ -180,6 +183,9 @@ const App: React.FC = () => {
       case 'signup':
         return <SignUpPage navigateTo={navigateTo} />;
       case 'dashboard':
+        if (!isAuthenticated || !user) {
+          return <SearchPage onSelectCreator={handleSelectCreator} navigateTo={navigateTo} />;
+        }
         return <DashboardPage navigateTo={navigateTo} onSelectCreator={handleSelectCreator} />;
        case 'contact':
         return <ContactPage navigateTo={navigateTo} />;

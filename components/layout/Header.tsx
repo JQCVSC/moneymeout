@@ -11,10 +11,13 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ navigateTo }) => {
     const { isAuthenticated, user, logout } = useAuth();
     
-    const handleLogout = () => {
-        logout();
-        navigateTo('search');
-    }
+    const handleLogout = async () => {
+        try {
+            await logout();
+        } finally {
+            navigateTo('search');
+        }
+    };
     
     const isCreator = !!user?.claimedCreator;
     
