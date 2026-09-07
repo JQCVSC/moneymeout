@@ -106,52 +106,116 @@ const SignUpPage: React.FC<SignUpPageProps> = ({ navigateTo }) => {
           <div className="space-y-6">
             {/* Step 1: Claim Channel (Only for Creators) */}
             {isCreator && (
-              <fieldset>
-                  <legend className="text-sm font-bold uppercase tracking-wider text-slate-300 mb-3 border-b border-white/10 pb-2 w-full">1. Find Your Channel</legend>
+              <fieldset className="space-y-3">
+                  <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+                    <legend className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                      <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-black ${selectedCreator ? 'bg-emerald-500 text-black' : 'bg-white/10 text-white'}`}>
+                        {selectedCreator ? '✓' : '1'}
+                      </span>
+                      Find Your Channel
+                    </legend>
+                    {selectedCreator && (
+                      <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                        Channel Linked
+                      </span>
+                    )}
+                  </div>
                   
                   {selectedCreator ? (
-                      <div className="bg-emerald-500/10 border-2 border-emerald-500/30 rounded-2xl p-4 text-center">
-                          <p className="font-bold text-emerald-400 text-sm">Selected Channel:</p>
-                          <div className="flex items-center gap-3 justify-center mt-2">
-                              <img src={selectedCreator.avatarUrl} className="w-11 h-11 rounded-full ring-2 ring-emerald-500/40 object-cover" alt="" referrerPolicy="no-referrer" />
-                              <span className="font-bold text-white text-lg">{selectedCreator.name}</span>
+                      <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 sm:p-5 text-center relative overflow-hidden">
+                          <div className="flex items-center gap-3 justify-center">
+                              <img src={selectedCreator.avatarUrl} className="w-12 h-12 rounded-full ring-2 ring-emerald-500/50 object-cover bg-slate-800" alt="" referrerPolicy="no-referrer" />
+                              <div className="text-left">
+                                <span className="font-bold text-white text-lg block leading-tight">{selectedCreator.name}</span>
+                                <span className="text-xs text-emerald-400 font-medium">{selectedCreator.handle}</span>
+                              </div>
                           </div>
-                          <button type="button" onClick={() => setSelectedCreator(null)} className="text-xs text-slate-400 hover:text-emerald-400 hover:underline mt-3 block mx-auto">Change channel</button>
+                          <button 
+                            type="button" 
+                            onClick={() => setSelectedCreator(null)} 
+                            className="text-xs text-slate-400 hover:text-white hover:underline mt-3 inline-block transition-colors"
+                          >
+                            ← Select a different channel
+                          </button>
                       </div>
                   ) : (
                       <>
-                      <p className="text-xs text-slate-400 mb-3">Search for your YouTube channel by name or handle.</p>
+                      <p className="text-xs text-slate-400">Search by your channel name or @handle to link your page.</p>
                       <form onSubmit={handleChannelSearch} className="flex gap-2">
-                          <Input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="e.g. MKBHD or @mkbhd" className="!rounded-xl !py-3 !px-4 !bg-slate-900/90 !border-white/10 !text-white placeholder:!text-slate-500 focus:!border-emerald-400 focus:!ring-emerald-400" />
-                          <Button type="submit" variant="secondary" className="!px-5 !py-3 !rounded-xl !bg-white/10 !text-white hover:!bg-white/20 !font-bold" isLoading={isSearching}>Find</Button>
+                          <Input 
+                            value={searchQuery} 
+                            onChange={e => setSearchQuery(e.target.value)} 
+                            placeholder="e.g. MKBHD or @mkbhd" 
+                            className="!rounded-xl !py-3 !px-4 !bg-slate-900/90 !border-white/10 !text-white placeholder:!text-slate-500 focus:!border-emerald-400 focus:!ring-emerald-400 text-sm sm:text-base" 
+                          />
+                          <Button 
+                            type="submit" 
+                            variant="secondary" 
+                            className="!px-5 !py-3 !rounded-xl !bg-emerald-500 hover:!bg-emerald-400 !text-black !font-bold flex-shrink-0 active:scale-95 transition-all shadow-md shadow-emerald-500/20" 
+                            isLoading={isSearching}
+                          >
+                            Search
+                          </Button>
                       </form>
                       </>
                   )}
               </fieldset>
             )}
 
-            {isCreator && isSearching ? <Spinner/> : isCreator && searchResults.length > 0 && (
-                <div className="space-y-2 max-h-60 overflow-y-auto p-2 bg-[#101626] border border-white/10 rounded-2xl no-scrollbar">
+            {isCreator && isSearching ? (
+                <div className="py-6 flex justify-center"><Spinner /></div>
+            ) : isCreator && searchResults.length > 0 && !selectedCreator && (
+                <div className="space-y-1.5 max-h-64 overflow-y-auto p-2 bg-[#101626] border border-white/10 rounded-2xl no-scrollbar">
+                    <p className="text-xs font-semibold text-slate-400 px-3 py-1 uppercase tracking-wider">Select your channel:</p>
                     {searchResults.map(creator => (
-                        <button type="button" key={creator.id} onClick={() => handleSelectCreator(creator)} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-left transition-colors">
-                           <img src={creator.avatarUrl} className="w-10 h-10 rounded-full object-cover flex-shrink-0 ring-1 ring-white/10" alt="" referrerPolicy="no-referrer" />
-                           <div className="truncate">
-                            <p className="font-bold text-white text-sm truncate">{creator.name}</p>
-                            <p className="text-xs text-emerald-400">{creator.handle}</p>
+                        <button 
+                          type="button" 
+                          key={creator.id} 
+                          onClick={() => handleSelectCreator(creator)} 
+                          className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-left transition-all group border border-transparent hover:border-white/10"
+                        >
+                           <img src={creator.avatarUrl} className="w-11 h-11 rounded-full object-cover flex-shrink-0 ring-1 ring-white/10 group-hover:ring-emerald-400/50 transition-all" alt="" referrerPolicy="no-referrer" />
+                           <div className="truncate flex-grow">
+                            <p className="font-bold text-white text-sm truncate group-hover:text-emerald-400 transition-colors">{creator.name}</p>
+                            <p className="text-xs text-slate-400">{creator.handle}</p>
                            </div>
+                           <span className="text-xs font-bold text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity bg-emerald-500/10 px-2.5 py-1 rounded-lg">
+                             Select →
+                           </span>
                         </button>
                     ))}
                 </div>
             )}
 
             {/* Step 2: Account Info */}
-            <fieldset>
-                <legend className="text-sm font-bold uppercase tracking-wider text-slate-300 mb-3 border-b border-white/10 pb-2 w-full">
-                  {isCreator ? '2. Create Your Account' : 'Create Your Account'}
-                </legend>
+            <fieldset className="space-y-3 pt-2">
+                <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+                  <legend className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-white/10 text-white flex items-center justify-center text-xs font-black">
+                      {isCreator ? '2' : '1'}
+                    </span>
+                    {isCreator ? 'Create Your Account' : 'Sign Up'}
+                  </legend>
+                </div>
+
                  <div className="space-y-4">
+                    {isCreator && !selectedCreator && (
+                      <p className="text-xs text-slate-400 italic">
+                        👆 First find and select your YouTube channel above to enable Google sign-up.
+                      </p>
+                    )}
                     {error && <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 p-3 rounded-xl text-center">{error}</p>}
-                    <Button onClick={handleGoogleSignUp} variant="secondary" className="w-full !py-4 !text-base !font-bold !bg-white hover:!bg-slate-100 !text-black rounded-xl shadow-lg transition-all" isLoading={isGoogleLoading} disabled={isCreator && !selectedCreator}>
+                    <Button 
+                      onClick={handleGoogleSignUp} 
+                      variant="secondary" 
+                      className={`w-full !py-4 !text-base !font-bold rounded-xl shadow-lg transition-all ${
+                        isCreator && !selectedCreator 
+                          ? '!bg-white/20 !text-slate-400 cursor-not-allowed opacity-60' 
+                          : '!bg-white hover:!bg-slate-100 !text-black hover:scale-[1.01] active:scale-95'
+                      }`} 
+                      isLoading={isGoogleLoading} 
+                      disabled={isCreator && !selectedCreator}
+                    >
                         <GoogleIcon className="w-5 h-5 mr-3" />
                         Sign up with Google
                     </Button>
