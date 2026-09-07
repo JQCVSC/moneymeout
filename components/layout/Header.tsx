@@ -22,69 +22,58 @@ const Header: React.FC<HeaderProps> = ({ navigateTo }) => {
     const isCreator = !!user?.claimedCreator;
     
   return (
-    <header className="bg-[var(--card-background-color)] border-b border-[var(--border-color)] sticky top-0 z-40">
+    <header className="bg-[#090d16]/85 backdrop-blur-xl border-b border-white/10 sticky top-0 z-40 transition-all duration-200">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          <button onClick={() => navigateTo(isAuthenticated ? 'dashboard' : 'search')} aria-label="Home">
+          <button onClick={() => navigateTo(isAuthenticated ? 'dashboard' : 'search')} aria-label="Home" className="transition-opacity hover:opacity-90">
             <Logo />
           </button>
-          <nav className="flex items-center gap-2 md:gap-4">
+          <nav className="flex items-center gap-2 md:gap-3">
             {isAuthenticated ? (
-                <>
-                    {isCreator && (
-                        <button 
-                            onClick={() => navigateTo('dashboard')}
-                            className="font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-sm md:text-base px-3 py-2"
-                        >
-                            My Dashboard
-                        </button>
-                    )}
-                    <button 
-                        onClick={() => navigateTo('contact')}
-                        className="font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-200 text-sm md:text-base px-4 py-2 rounded-full hover:shadow-[0_2px_12px_rgba(0,197,101,0.25)]"
-                    >
-                        Contact
-                    </button>
-                    <button 
-                        onClick={handleLogout}
-                        className="bg-gray-200 text-gray-700 font-semibold rounded-full px-4 py-2 text-sm md:text-base hover:bg-gray-300 transition-colors"
-                    >
-                        Log Out
-                    </button>
-                </>
+              <>
+                {isCreator && (
+                  <button 
+                    onClick={() => navigateTo('dashboard')}
+                    className="font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all text-sm md:text-base px-3.5 py-2 rounded-xl"
+                  >
+                    My Dashboard
+                  </button>
+                )}
+                <button 
+                  onClick={() => navigateTo('contact')}
+                  className="font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all text-sm md:text-base px-3.5 py-2 rounded-xl"
+                >
+                  Contact
+                </button>
+                <button 
+                  onClick={handleLogout}
+                  className="bg-white/10 hover:bg-white/15 text-slate-200 font-medium rounded-xl px-4 py-2 text-sm md:text-base transition-colors border border-white/10"
+                >
+                  Log Out
+                </button>
+              </>
             ) : (
-                <>
-                    <div className="relative group">
-                        <button 
-                            onClick={() => navigateTo('login')}
-                            className="font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-200 text-sm md:text-base px-4 py-2 rounded-full hover:shadow-[0_2px_12px_rgba(0,197,101,0.25)]"
-                        >
-                            Log In
-                        </button>
-                        
-                        {/* CTA Message */}
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-64 bg-[#00c565] text-white p-3 rounded-xl shadow-2xl pointer-events-none animate-bounce-subtle z-50 hidden lg:block">
-                            <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-[#00c565]"></div>
-                            <p className="text-xs font-bold text-center leading-tight">
-                                Please sign in to superchat your donation to your favorite creators
-                            </p>
-                        </div>
-                    </div>
-
-                     <button 
-                        onClick={() => navigateTo('contact')}
-                        className="font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-200 text-sm md:text-base px-4 py-2 rounded-full hover:shadow-[0_2px_12px_rgba(0,197,101,0.25)]"
-                    >
-                        Contact
-                    </button>
-                    <button 
-                        onClick={() => navigateTo('signup')}
-                        className="bg-[var(--success-color)] text-white font-semibold rounded-full px-4 py-2 text-sm md:text-base hover:bg-[var(--success-hover-color)] transition-colors"
-                        title="For YouTube Creators"
-                    >
-                        Start my page
-                    </button>
-                </>
+              <>
+                <button 
+                  onClick={() => navigateTo('contact')}
+                  className="font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all text-sm md:text-base px-3.5 py-2 rounded-xl"
+                >
+                  Contact
+                </button>
+                <button 
+                  onClick={() => navigateTo('login')}
+                  className="font-medium text-slate-200 hover:text-white border border-white/15 hover:border-white/30 hover:bg-white/5 transition-all text-sm md:text-base px-4 py-2 rounded-xl"
+                >
+                  Log In
+                </button>
+                <button 
+                  onClick={() => navigateTo('signup')}
+                  className="bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-xl px-4 md:px-5 py-2 text-sm md:text-base transition-all shadow-lg shadow-emerald-500/20 active:scale-95"
+                  title="For YouTube Creators"
+                >
+                  Start my page
+                </button>
+              </>
             )}
           </nav>
         </div>

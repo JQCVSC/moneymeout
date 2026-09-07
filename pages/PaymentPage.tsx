@@ -70,25 +70,27 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ amount, creator, message, o
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {!isElementReady && (
-        <div className="flex items-center justify-center p-6 text-sm text-gray-500 gap-3 bg-gray-50 rounded-xl border border-gray-100">
-          <div className="w-5 h-5 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="flex items-center justify-center p-6 text-sm text-slate-300 gap-3 bg-[#101626]/80 rounded-2xl border border-white/10">
+          <div className="w-5 h-5 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin"></div>
           <span>Loading secure payment form...</span>
         </div>
       )}
-      <PaymentElement 
-        options={{ layout: 'tabs' }} 
-        onReady={() => setIsElementReady(true)} 
-      />
+      <div className="bg-[#101626]/60 p-4 sm:p-5 rounded-2xl border border-white/10">
+        <PaymentElement 
+          options={{ layout: 'tabs' }} 
+          onReady={() => setIsElementReady(true)} 
+        />
+      </div>
       {errorMessage && (
-        <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-medium">
+        <div className="p-4 bg-red-500/10 border border-red-500/30 text-red-300 rounded-xl text-sm font-medium">
           {errorMessage}
         </div>
       )}
-      <div className="flex flex-col gap-3 pt-4">
+      <div className="flex flex-col gap-3 pt-2">
         <Button
           type="submit"
           variant="success"
-          className="w-full !py-4 !text-xl shadow-xl shadow-emerald-100 hover:shadow-emerald-200 cursor-pointer"
+          className="w-full !py-4 !text-lg font-black bg-emerald-500 hover:bg-emerald-400 !text-black rounded-xl shadow-lg shadow-emerald-500/25 active:scale-95 transition-all cursor-pointer"
           isLoading={isProcessing}
         >
           Pay ${amount.toFixed(2)}
@@ -96,7 +98,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ amount, creator, message, o
         <button
           type="button"
           onClick={onCancel}
-          className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+          className="text-sm text-slate-400 hover:text-white transition-colors cursor-pointer py-1"
         >
           Cancel and go back
         </button>
@@ -176,39 +178,57 @@ const PaymentPage: React.FC<PaymentPageProps> = ({ creator, amount: initialAmoun
     }, [creator, localAmount, localMessage, user]);
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-white">
-        {/* Left Side: Payment Details (White) */}
-        <div className="w-full md:w-1/2 p-6 sm:p-10 md:p-16 flex flex-col justify-center bg-white order-2 md:order-1">
+    <div className="min-h-screen flex flex-col md:flex-row bg-[#090d16] text-white">
+        {/* Left Side: Payment Details */}
+        <div className="w-full md:w-1/2 p-6 sm:p-10 md:p-14 flex flex-col justify-center bg-[#090d16] order-2 md:order-1 border-r border-white/5">
              <div className="max-w-md mx-auto w-full">
-                 <div className="mb-8 md:mb-12">
-                     <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-[var(--success-color)]">Checkout</span>
-                     <h1 className="text-3xl sm:text-4xl font-black text-[var(--text-primary)] mt-2 tracking-tighter">Complete Support</h1>
+                 <div className="mb-6 md:mb-8">
+                     <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-emerald-400">Direct Support</span>
+                     <h1 className="text-3xl sm:text-4xl font-black text-white mt-1.5 tracking-tight">Complete Support</h1>
                  </div>
 
-                 <div className="space-y-6 md:space-y-8">
+                 <div className="space-y-6">
                      {/* Amount Selector */}
-                     <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-gray-100">
+                     <div className="glass-panel rounded-3xl p-5 sm:p-6 border border-white/10">
                          <div className="flex items-center justify-between mb-4">
-                             <p className="text-[10px] sm:text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">Support Amount</p>
-                             <div className="flex items-center gap-2 sm:gap-3">
+                             <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Support Amount</p>
+                             <div className="flex items-center gap-2.5">
                                  <button 
                                      onClick={() => setLocalAmount(a => Math.max(5, a - 5))}
-                                     className="h-8 w-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-white transition-colors active:scale-95"
+                                     className="h-8 w-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/15 text-white transition-colors active:scale-95 font-bold"
                                  >-</button>
-                                 <span className="text-lg sm:text-xl font-black text-[var(--success-color)] tracking-tight">${localAmount}</span>
+                                 <span className="text-2xl font-black text-emerald-400 tracking-tight">${localAmount}</span>
                                  <button 
                                      onClick={() => setLocalAmount(a => a + 5)}
-                                     className="h-8 w-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-white transition-colors active:scale-95"
+                                     className="h-8 w-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/15 text-white transition-colors active:scale-95 font-bold"
                                  >+</button>
                              </div>
                          </div>
+
+                         {/* Quick Select Chips */}
+                         <div className="grid grid-cols-4 gap-2 mb-4">
+                             {[5, 10, 25, 50].map((preset) => (
+                                 <button
+                                     key={preset}
+                                     type="button"
+                                     onClick={() => setLocalAmount(preset)}
+                                     className={`py-2 rounded-xl font-bold text-xs transition-all ${
+                                         localAmount === preset
+                                             ? 'bg-emerald-500 text-black shadow-md shadow-emerald-500/20'
+                                             : 'bg-white/5 text-slate-300 hover:bg-white/10 border border-white/5'
+                                     }`}
+                                 >
+                                     ${preset}
+                                 </button>
+                             ))}
+                         </div>
                          
                          <div className="space-y-2">
-                             <label htmlFor="payment-message" className="text-[10px] sm:text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider block">Message (Optional)</label>
+                             <label htmlFor="payment-message" className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Message (Optional)</label>
                              <textarea
                                  id="payment-message"
                                  rows={2}
-                                 className="w-full rounded-xl border-gray-200 bg-white p-3 text-sm focus:border-[var(--success-color)] focus:ring-[var(--success-color)] transition-all"
+                                 className="w-full rounded-xl border border-white/10 bg-slate-900/90 p-3 text-sm text-white placeholder:text-slate-500 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition-all outline-none"
                                  placeholder="Say something nice..."
                                  value={localMessage}
                                  onChange={(e) => setLocalMessage(e.target.value)}
@@ -217,12 +237,12 @@ const PaymentPage: React.FC<PaymentPageProps> = ({ creator, amount: initialAmoun
                      </div>
 
                      {error && (
-                         <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm flex flex-col gap-2">
+                         <div className="p-4 bg-red-500/10 border border-red-500/30 text-red-300 rounded-xl text-sm flex flex-col gap-2">
                              <div className="font-medium">{error}</div>
                              <button 
                                  type="button" 
                                  onClick={() => setLocalAmount(a => a)} // re-triggers debounced fetch
-                                 className="self-start text-xs bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1.5 rounded-lg font-semibold transition-colors"
+                                 className="self-start text-xs bg-red-500/20 hover:bg-red-500/30 text-red-200 px-3 py-1.5 rounded-lg font-semibold transition-colors"
                              >
                                  Retry Connection
                              </button>
@@ -230,15 +250,31 @@ const PaymentPage: React.FC<PaymentPageProps> = ({ creator, amount: initialAmoun
                      )}
 
                      {isInitializing && (
-                         <div className="flex flex-col items-center justify-center py-8 md:py-12">
-                             <div className="w-10 h-10 sm:w-12 sm:h-12 border-4 border-[var(--success-color)] border-t-transparent rounded-full animate-spin mb-4"></div>
-                             <p className="text-[var(--text-secondary)] text-sm sm:text-base font-medium">Updating secure checkout...</p>
+                         <div className="flex flex-col items-center justify-center py-8 md:py-10">
+                             <div className="w-10 h-10 border-3 border-emerald-400 border-t-transparent rounded-full animate-spin mb-3"></div>
+                             <p className="text-slate-400 text-sm font-medium">Updating secure checkout...</p>
                          </div>
                      )}
 
                      {clientSecret && !isInitializing && (
                          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                             <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+                             <Elements 
+                                stripe={stripePromise} 
+                                options={{ 
+                                    clientSecret, 
+                                    appearance: { 
+                                        theme: 'night',
+                                        variables: {
+                                            colorPrimary: '#00c565',
+                                            colorBackground: '#101626',
+                                            colorText: '#f8fafc',
+                                            colorDanger: '#ef4444',
+                                            fontFamily: 'Inter, sans-serif',
+                                            borderRadius: '12px',
+                                        }
+                                    } 
+                                }}
+                             >
                                  <CheckoutForm 
                                      amount={localAmount} 
                                      creator={creator} 
@@ -250,46 +286,61 @@ const PaymentPage: React.FC<PaymentPageProps> = ({ creator, amount: initialAmoun
                          </div>
                      )}
 
-                     <p className="text-center text-[10px] sm:text-xs text-[var(--text-secondary)] mt-6 md:mt-8">
-                         Your payment information is encrypted and never stored on our servers.
+                     <p className="text-center text-xs text-slate-500 mt-6">
+                         🔒 256-bit encrypted checkout. Funds deposit directly to creator.
                      </p>
                  </div>
              </div>
         </div>
 
-        {/* Right Side: Branding & Info (Green) */}
-        <div className="w-full md:w-1/2 bg-[var(--success-color)] p-6 sm:p-10 md:p-16 flex flex-col justify-between relative overflow-hidden order-1 md:order-2 min-h-[300px] md:min-h-screen">
-             {/* Background Blobs */}
-             <div className="absolute top-0 -left-4 w-48 h-48 sm:w-72 sm:h-72 bg-white/10 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-             <div className="absolute top-0 -right-4 w-48 h-48 sm:w-72 sm:h-72 bg-white/10 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-             <div className="absolute -bottom-8 left-20 w-48 h-48 sm:w-72 sm:h-72 bg-white/10 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+        {/* Right Side: Creator Showcase & Branding */}
+        <div className="w-full md:w-1/2 bg-[#0c111e] p-6 sm:p-10 md:p-16 flex flex-col justify-between relative overflow-hidden order-1 md:order-2 min-h-[340px] md:min-h-screen">
+             {/* Background Glows */}
+             <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+             <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
              <div className="relative z-10">
                  <button 
                      onClick={() => navigateTo('profile', creator)}
-                     className="mb-8 md:mb-12 flex items-center gap-2 text-white/80 hover:text-white transition-colors group text-sm sm:text-base"
+                     className="mb-8 md:mb-12 inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors group text-sm sm:text-base font-medium"
                  >
-                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                      </svg>
                      <span>Back to profile</span>
                  </button>
 
-                 <Logo className="invert brightness-0 scale-90 sm:scale-100 origin-left" />
+                 <Logo className="scale-90 sm:scale-100 origin-left mb-10" />
+
+                 {/* Creator Card Preview */}
+                 <div className="glass-panel p-5 rounded-3xl border border-white/10 flex items-center gap-4 max-w-md shadow-xl">
+                     <img 
+                         src={creator.avatarUrl} 
+                         alt={creator.name} 
+                         className="w-16 h-16 rounded-full object-cover ring-2 ring-emerald-500/40 bg-slate-800 shadow-md" 
+                         referrerPolicy="no-referrer"
+                     />
+                     <div>
+                         <p className="font-black text-xl text-white">{creator.name}</p>
+                         <p className="text-xs font-semibold text-emerald-400 mt-0.5">{creator.handle}</p>
+                         <p className="text-xs text-slate-400 mt-1">Verified YouTube Creator</p>
+                     </div>
+                 </div>
                  
-                 <div className="mt-12 sm:mt-16 md:mt-24">
-                     <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-white leading-tight tracking-tighter">
-                         Supporting <br />
-                         <span className="text-white/80">{creator.name}</span>
+                 <div className="mt-10 md:mt-14">
+                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight tracking-tight">
+                         Directly Supporting <br />
+                         <span className="bg-gradient-to-r from-emerald-400 to-green-500 bg-clip-text text-transparent">{creator.name}</span>
                      </h2>
-                     <p className="mt-4 sm:mt-6 text-base sm:text-lg md:text-xl text-white/70 max-w-md">
-                         Your contribution helps creators keep doing what they love. Thank you for being part of the community.
+                     <p className="mt-4 text-base sm:text-lg text-slate-300 max-w-md leading-relaxed">
+                         Your contribution goes directly to the creator's bank account with 0 hidden middleman cuts.
                      </p>
                  </div>
              </div>
 
-             <div className="relative z-10 mt-8 md:mt-12 pt-6 md:pt-8 border-t border-white/20">
-                 <p className="text-white/50 text-[10px] sm:text-xs">Secure payment powered by Stripe</p>
+             <div className="relative z-10 mt-8 md:mt-12 pt-6 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
+                 <span>Secure payment powered by Stripe</span>
+                 <span className="text-emerald-400 font-bold">Money Me Out</span>
              </div>
         </div>
     </div>

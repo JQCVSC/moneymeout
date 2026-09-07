@@ -28,27 +28,34 @@ const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({ creator, amount
     }, [addDonation, amount, creator.id, user, message, paymentIntentId]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="w-full max-w-md text-center">
-        <div className="bg-white p-8 rounded-2xl shadow-md border border-gray-200">
-            <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-green-100 mb-6">
-                 <svg className="h-12 w-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+    <div className="min-h-screen flex items-center justify-center bg-[#090d16] text-white p-4 relative overflow-hidden">
+      {/* Background ambient glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+      <div className="w-full max-w-md text-center relative z-10">
+        <div className="glass-panel p-8 md:p-10 rounded-3xl border border-white/10 shadow-2xl">
+            <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 mb-6 shadow-lg">
+                 <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
-          <h1 className="text-2xl font-bold text-gray-800">Payment Successful!</h1>
-           <p className="text-lg text-gray-500 mt-2">
-                Thank you for your generous support of <span className="font-semibold text-gray-700">{creator.name}</span>.
+          <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">Payment Successful!</h1>
+           <p className="text-base text-slate-400 mt-2">
+                Thank you for your generous support of <span className="font-bold text-white">{creator.name}</span>.
            </p>
-           <p className="text-4xl font-bold text-green-600 my-4">${amount.toFixed(2)}</p>
+           <p className="text-4xl sm:text-5xl font-black text-emerald-400 my-5">${amount.toFixed(2)}</p>
            
            {message && (
-             <div className="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-100 italic text-gray-600 text-sm">
+             <div className="mt-4 p-4 bg-slate-900/90 rounded-2xl border border-white/5 italic text-slate-300 text-sm">
                "{message}"
              </div>
            )}
 
-          <Button onClick={() => navigateTo('profile', creator)} variant="primary" className="mt-6 w-full">
+          <Button 
+            onClick={() => navigateTo('profile', creator)} 
+            variant="primary" 
+            className="mt-6 w-full !py-3.5 !bg-emerald-500 hover:!bg-emerald-400 !text-black !font-black !rounded-xl shadow-lg shadow-emerald-500/20 active:scale-95 transition-all"
+          >
             Back to {creator.name}'s Page
           </Button>
         </div>

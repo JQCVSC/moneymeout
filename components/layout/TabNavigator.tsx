@@ -8,16 +8,16 @@ interface TabNavigatorProps {
 
 const TabNavigator: React.FC<TabNavigatorProps> = ({ tabs, activeTab, setActiveTab }) => {
   return (
-    <div className="border-b border-[var(--border-color)]">
-      <nav className="-mb-px flex space-x-6 overflow-x-auto" aria-label="Tabs">
+    <div className="bg-[#101626]/90 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 inline-flex max-w-full overflow-x-auto no-scrollbar shadow-xl">
+      <nav className="flex space-x-1.5" aria-label="Tabs">
         {tabs.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`whitespace-nowrap pb-4 px-1 border-b-2 font-semibold text-base transition-colors duration-200
+            className={`whitespace-nowrap py-2.5 px-4 rounded-xl font-bold text-sm md:text-base transition-all duration-200
               ${activeTab === tab
-                ? 'border-[var(--primary-color)] text-[var(--primary-color)]'
-                : 'border-transparent text-[var(--text-secondary)] hover:text-gray-700 hover:border-gray-400'
+                ? 'bg-emerald-500 text-black shadow-md shadow-emerald-500/20'
+                : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`
             }
             aria-current={activeTab === tab ? 'page' : undefined}

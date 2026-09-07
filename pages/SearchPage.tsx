@@ -67,7 +67,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ onSelectCreator, navigateTo }) 
     };
 
     return (
-        <div className="bg-[#121212] min-h-screen font-sans text-white selection:bg-emerald-500/30">
+        <div className="bg-[#090d16] min-h-screen font-sans text-white selection:bg-emerald-500/30">
             <Header navigateTo={navigateTo} />
             
             <main>
@@ -147,14 +147,17 @@ const SearchPage: React.FC<SearchPageProps> = ({ onSelectCreator, navigateTo }) 
                                 <div className="py-20 flex justify-center"><Spinner /></div>
                             ) : (
                                 <div className="max-w-7xl mx-auto">
-                                    <div className="flex items-center justify-between mb-10 border-b border-slate-900 pb-6">
-                                        <h2 className="text-3xl font-black italic uppercase italic">
-                                            {searchType === 'featured' ? 'Featured Creators' : `Results for "${query}"`}
-                                        </h2>
+                                    <div className="flex items-center justify-between mb-10 border-b border-white/10 pb-6">
+                                        <div className="flex items-center gap-3">
+                                            <span className="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(0,197,101,0.8)] animate-pulse"></span>
+                                            <h2 className="text-2xl md:text-3xl font-black tracking-tight text-white">
+                                                {searchType === 'featured' ? 'Featured Creators' : `Results for "${query}"`}
+                                            </h2>
+                                        </div>
                                         {searchType === 'keyword' && (
                                             <button 
                                                 onClick={() => window.location.reload()} 
-                                                className="text-emerald-500 font-bold hover:underline"
+                                                className="text-emerald-400 font-bold hover:underline"
                                             >
                                                 Back to Featured
                                             </button>
@@ -179,7 +182,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ onSelectCreator, navigateTo }) 
                 </section>
 
                 {/* Comparison Section */}
-                <section className="py-32 bg-[#1a1a1a] relative overflow-hidden">
+                <section className="py-24 md:py-32 bg-[#0c111e]/90 relative overflow-hidden border-y border-white/5">
                     <div className="container mx-auto px-4 max-w-6xl">
                         <div className="text-center mb-20 md:mb-32">
                             <h2 className="text-4xl md:text-6xl font-black mb-6 italic uppercase">Why Money Me Out?</h2>

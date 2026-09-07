@@ -21,7 +21,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ navigateTo }) => {
     return false;
   });
 
-  const inputClasses = "w-full text-base transition-shadow focus:ring-2 focus:outline-none text-[var(--text-primary)] bg-white border border-[var(--border-color)] placeholder:text-[var(--text-secondary)] focus:ring-[var(--success-color)] focus:border-[var(--success-color)] rounded-lg py-3 px-4 disabled:bg-gray-100";
+    const inputClasses = "w-full text-base transition-all focus:ring-1 focus:ring-emerald-400 focus:border-emerald-400 text-white bg-slate-900/90 border border-white/10 placeholder:text-slate-500 rounded-xl py-3 px-4 outline-none disabled:bg-slate-800/50";
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -63,11 +63,11 @@ const ContactPage: React.FC<ContactPageProps> = ({ navigateTo }) => {
 
   const renderForm = () => (
     <>
-      <h1 className="text-2xl font-bold text-center text-gray-800 mb-2">Contact Us</h1>
-      <p className="text-center text-gray-500 mb-6">Have a question or feedback? Let us know!</p>
+      <h1 className="text-2xl md:text-3xl font-black text-center text-white mb-2 tracking-tight">Contact Us</h1>
+      <p className="text-center text-slate-400 mb-6 text-sm">Have a question or feedback? Let us know!</p>
       
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6 text-sm">
+        <div className="bg-red-500/10 border border-red-500/30 text-red-300 px-4 py-3 rounded-xl mb-6 text-sm">
           {error}
         </div>
       )}
@@ -78,7 +78,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ navigateTo }) => {
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="NAME" className="text-sm font-bold text-gray-600 block mb-2">Your Name</label>
+            <label htmlFor="NAME" className="text-xs font-bold uppercase tracking-wider text-slate-300 block mb-2">Your Name</label>
             <input
               id="NAME"
               name="NAME"
@@ -91,7 +91,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ navigateTo }) => {
             />
           </div>
           <div>
-            <label htmlFor="EMAIL" className="text-sm font-bold text-gray-600 block mb-2">Your Email</label>
+            <label htmlFor="EMAIL" className="text-xs font-bold uppercase tracking-wider text-slate-300 block mb-2">Your Email</label>
             <input
               id="EMAIL"
               name="EMAIL"
@@ -105,7 +105,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ navigateTo }) => {
           </div>
         </div>
         <div>
-          <label htmlFor="SUBJECT" className="text-sm font-bold text-gray-600 block mb-2">Subject</label>
+          <label htmlFor="SUBJECT" className="text-xs font-bold uppercase tracking-wider text-slate-300 block mb-2">Subject</label>
           <input
             id="SUBJECT"
             name="SUBJECT"
@@ -117,12 +117,12 @@ const ContactPage: React.FC<ContactPageProps> = ({ navigateTo }) => {
           />
         </div>
         <div>
-          <label htmlFor="MESSAGE" className="text-sm font-bold text-gray-600 block mb-2">Message</label>
+          <label htmlFor="MESSAGE" className="text-xs font-bold uppercase tracking-wider text-slate-300 block mb-2">Message</label>
           <textarea
             id="MESSAGE"
             name="MESSAGE"
             rows={5}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--success-color)] focus:border-[var(--success-color)] transition text-base text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] disabled:bg-gray-100"
+            className="w-full p-4 border border-white/10 bg-slate-900/90 rounded-xl focus:ring-1 focus:ring-emerald-400 focus:border-emerald-400 transition text-base text-white placeholder:text-slate-500 outline-none"
             placeholder="Write your message here..."
             required
             disabled={isSubmitting}
@@ -132,7 +132,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ navigateTo }) => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="inline-flex items-center justify-center rounded-full text-base font-bold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-70 disabled:pointer-events-none px-6 bg-[var(--success-color)] text-white hover:bg-[var(--success-hover-color)] focus:ring-[var(--success-color)] w-full py-3 text-lg"
+          className="inline-flex items-center justify-center rounded-xl text-lg font-black transition-all active:scale-95 px-6 bg-emerald-500 text-black hover:bg-emerald-400 shadow-lg shadow-emerald-500/20 w-full py-4 cursor-pointer"
         >
           {isSubmitting ? 'Sending...' : 'Send Message'}
         </button>
@@ -141,17 +141,17 @@ const ContactPage: React.FC<ContactPageProps> = ({ navigateTo }) => {
   );
 
   const renderSuccess = () => (
-    <div className="text-center">
-      <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
-        <svg className="h-10 w-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+    <div className="text-center py-6">
+      <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 mb-6 shadow-lg">
+        <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
         </svg>
       </div>
-      <h1 className="text-2xl font-bold text-gray-800">Message Sent!</h1>
-      <p className="text-gray-600 mt-2">Thanks for reaching out. We'll get back to you as soon as possible.</p>
+      <h1 className="text-2xl md:text-3xl font-black text-white">Message Sent!</h1>
+      <p className="text-slate-400 mt-2 text-base">Thanks for reaching out. We'll get back to you as soon as possible.</p>
       <button
         onClick={() => navigateTo(isAuthenticated ? 'dashboard' : 'search')}
-        className="inline-flex items-center justify-center rounded-full font-bold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 px-6 py-3 bg-[var(--success-color)] text-white hover:bg-[var(--success-hover-color)] focus:ring-[var(--success-color)] mt-6 w-full text-lg shadow-sm"
+        className="inline-flex items-center justify-center rounded-xl font-black transition-all active:scale-95 px-6 py-3.5 bg-emerald-500 text-black hover:bg-emerald-400 mt-8 w-full text-base shadow-lg shadow-emerald-500/20 cursor-pointer"
       >
         Back to Home
       </button>
@@ -159,20 +159,23 @@ const ContactPage: React.FC<ContactPageProps> = ({ navigateTo }) => {
   );
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#090d16] text-white p-4 relative overflow-hidden">
+      {/* Background ambient glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+
       <button
         onClick={() => navigateTo(isAuthenticated ? 'dashboard' : 'search')}
-        className="fixed top-4 left-4 z-50 bg-white/70 backdrop-blur-sm p-2 rounded-full text-[var(--text-primary)] hover:bg-white shadow-md transition-all"
+        className="fixed top-5 left-5 z-50 bg-[#101626]/80 backdrop-blur-md p-3 rounded-full text-slate-200 hover:text-white border border-white/10 hover:border-white/20 shadow-xl transition-all hover:scale-105"
         aria-label="Go back"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
       </button>
 
-      <div className="w-full max-w-lg">
+      <div className="w-full max-w-lg relative z-10">
         <div className="flex justify-center mb-8">
           <Logo />
         </div>
-        <div className="bg-white p-8 rounded-2xl shadow-md border border-gray-200">
+        <div className="glass-panel p-8 md:p-10 rounded-3xl shadow-2xl border border-white/10">
           {isSuccess ? renderSuccess() : renderForm()}
         </div>
       </div>

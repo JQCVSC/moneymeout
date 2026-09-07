@@ -31,18 +31,26 @@ const FeedPostCard: React.FC<FeedPostCardProps> = ({ post }) => {
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="bg-white rounded-2xl shadow-sm overflow-hidden group transition-shadow hover:shadow-lg border border-[var(--border-color)]"
+        className="bg-[#101626]/80 backdrop-blur-md rounded-2xl overflow-hidden group transition-all duration-300 hover:shadow-[0_10px_30px_-10px_rgba(0,197,101,0.2)] hover:-translate-y-1 border border-white/10 hover:border-emerald-500/30 flex flex-col"
     >
-      <div className="aspect-video overflow-hidden">
+      <div className="aspect-video overflow-hidden relative bg-slate-800">
         <img 
             src={thumbnailUrl} 
             alt={title} 
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" 
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#101626]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
       </div>
-      <div className="p-4">
-        <h3 className="font-bold text-[var(--text-primary)] leading-snug group-hover:text-[var(--primary-hover-color)] transition-colors">{title}</h3>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">{timeAgo(publishedAt)}</p>
+      <div className="p-4 flex-grow flex flex-col justify-between">
+        <h3 className="font-bold text-slate-100 text-sm md:text-base leading-snug group-hover:text-emerald-400 transition-colors line-clamp-2">
+          {title}
+        </h3>
+        <p className="mt-3 text-xs font-medium text-slate-400 flex items-center justify-between">
+          <span>{timeAgo(publishedAt)}</span>
+          <span className="text-emerald-400 font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+            Watch &rarr;
+          </span>
+        </p>
       </div>
     </a>
   );
