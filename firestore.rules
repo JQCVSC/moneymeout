@@ -167,12 +167,15 @@ service cloud.firestore {
       allow create: if isAdmin()
           || (
               isCreatorOwner(creatorId)
+              && isValidCreatorProfile(request.resource.data)
               && !request.resource.data.keys().hasAny(['balance', 'totalEarnings', 'stripeConnectAccountId', 'stripeOnboardingComplete'])
           );
       // Allow creator owner to edit cosmetic fields or set initial non-financial metadata
       allow update: if isAdmin()
           || (
               isCreatorOwner(creatorId)
+              && isValidCreatorProfile(request.resource.data)
+              && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['handle'])
               && (
                   request.resource.data.diff(resource.data).affectedKeys().hasOnly(['description', 'avatarUrl', 'bannerUrl'])
                   || (
